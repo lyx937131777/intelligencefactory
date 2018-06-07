@@ -150,7 +150,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
             case R.id.bt_login:
                 username_text = username.getText().toString();
                 password_text = password.getText().toString();
-                Intent test_setting = new Intent(LoginActivity.this, TodolistActivity.class);
+                Intent test_setting = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(test_setting);
                 //密码错误、用户不存在
 

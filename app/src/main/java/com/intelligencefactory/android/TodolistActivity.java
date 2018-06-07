@@ -46,12 +46,9 @@ public class TodolistActivity extends AppCompatActivity
                 Date startdate = new Date();
                 Date enddate = new Date();
                 Todolist task = new Todolist("NewTask",startdate,enddate);
- //               Intent intent = new Intent(TodolistActivity.this, EditActivity.class);
-                Intent intent = new Intent(TodolistActivity.this, MemoActivity.class);
+                Intent intent = new Intent(TodolistActivity.this, EditActivity.class);
                 intent.putExtra("todolist",task);
                 startActivityForResult(intent,2);
-                //Intent intent2 = new Intent(TodolistActivity.this, TestActivity.class);
-                //startActivity(intent2);
             }
         });
     }

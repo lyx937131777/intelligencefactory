@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.intelligencefactory.android">
 
     <application
@@ -24,7 +25,15 @@
         <activity android:name=".TodolistActivity"/>
         <activity android:name=".RegisterActivity"/>
         <activity android:name=".SettingsActivity"/>
+        <activity android:name=".MainActivity" />
 
+        <service
+            android:name=".MyService"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
 </manifest>
