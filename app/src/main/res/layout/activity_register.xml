@@ -1,21 +1,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fitsSystemWindows="true"
     android:background="@android:color/white">
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="55dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/bt_go_back"
-            android:layout_width="12dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="30dp"
-            android:background="@drawable/go_back" />
-    </LinearLayout>
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/toolbar"
+        app:title="注册账户"
+        app:titleTextAppearance="@style/Toolbartile"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
 
     <RelativeLayout
@@ -26,22 +24,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="60dp"
         android:gravity="center" >
-        <FrameLayout
-            android:id="@+id/login_title"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="50dp"
-            android:layout_marginLeft="10dp"
-            android:gravity="center">
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:text="注册账户"
-                android:textColor="#222"
-                android:textSize="30sp"/>
 
-        </FrameLayout>
         <FrameLayout
             android:id="@+id/username_layout"
             android:layout_width="fill_parent"

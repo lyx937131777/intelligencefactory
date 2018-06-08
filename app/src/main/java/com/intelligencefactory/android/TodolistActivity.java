@@ -3,6 +3,7 @@ package com.intelligencefactory.android;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -23,6 +24,14 @@ public class TodolistActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todolist);
         initTodolist();
+        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null)
+        {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         TodolistAdapter adapter = new TodolistAdapter(TodolistActivity.this,R.layout.todolist_item, todolistList);
         listview = (ListView) findViewById(R.id.list_view);
         listview.setAdapter(adapter);
@@ -51,6 +60,18 @@ public class TodolistActivity extends AppCompatActivity
                 startActivityForResult(intent,2);
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
     }
 
     @Override

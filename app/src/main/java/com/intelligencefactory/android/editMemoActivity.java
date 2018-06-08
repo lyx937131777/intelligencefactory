@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,8 +26,6 @@ public class editMemoActivity extends AppCompatActivity
 {
     private TextView tv_time;
     private EditText et_body;
-    private Button btn_cancel;
-    private Button btn_confirm;
     private String type;
     private String fileName;
     private String filepath;
@@ -36,6 +35,14 @@ public class editMemoActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_memo);
+
+        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null)
+        {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         Bundle myBundle = this.getIntent().getExtras();
         type = myBundle.getString("type");
@@ -71,26 +78,74 @@ public class editMemoActivity extends AppCompatActivity
         //载入最后修改时间---------undone
         //tv_time.setText(getCurrentTime());
 
-        //返回按钮
-        btn_cancel = (Button) findViewById(R.id.btn_cancel);
-        btn_cancel.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Intent intent = new Intent();
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
+    }
 
-        //确认按钮
-        btn_confirm = (Button) findViewById(R.id.btn_confirm);
-        btn_confirm.setOnClickListener(new View.OnClickListener()
+    @Override
+    protected void onDestroy()
+    {
+        Log.e("editMemoActivity","des!!!!!!!");
+        //更新最后修改时间
+        tv_time.setText(getCurrentTime());
+        Log.e("4", "==to delete file===");
+        if (fileName != null)
         {
-            @Override
-            public void onClick(View view)
+            File file = new File(filepath + "/" + fileName);
+            Log.e("4", "====file is no null====");
+            Log.e("4", "file name is:" + fileName + "");
+            if (file.exists() && file.isFile())
             {
+                Log.e("4", "file is ok");
+                file.delete();
+            }
+        }
+        //如果文件内容非空，将memo存入本地文件
+        fileName = "memo_" + getCurrentTimeSS();
+        String content = et_body.getText().toString();
+        if (content.length() > 0)
+        {
+            saveDataToFile(getApplicationContext(), content, fileName);
+        }
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        //更新最后修改时间
+        tv_time.setText(getCurrentTime());
+        Log.e("4", "==to delete file===");
+        if (fileName != null)
+        {
+            File file = new File(filepath + "/" + fileName);
+            Log.e("4", "====file is no null====");
+            Log.e("4", "file name is:" + fileName + "");
+            if (file.exists() && file.isFile())
+            {
+                Log.e("4", "file is ok");
+                file.delete();
+            }
+        }
+        //如果文件内容非空，将memo存入本地文件
+        fileName = "memo_" + getCurrentTimeSS();
+        String content = et_body.getText().toString();
+        if (content.length() > 0)
+        {
+            saveDataToFile(getApplicationContext(), content, fileName);
+        }
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
                 //更新最后修改时间
                 tv_time.setText(getCurrentTime());
                 Log.e("4", "==to delete file===");
@@ -115,8 +170,9 @@ public class editMemoActivity extends AppCompatActivity
                 Intent intent = new Intent();
                 setResult(RESULT_OK, intent);
                 finish();
-            }
-        });
+                break;
+        }
+        return true;
     }
 
     private String getCurrentTime()
