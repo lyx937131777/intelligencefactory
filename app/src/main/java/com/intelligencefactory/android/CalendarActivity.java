@@ -3,6 +3,7 @@ package com.intelligencefactory.android;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 
 public class CalendarActivity extends AppCompatActivity
 {
@@ -12,7 +13,25 @@ public class CalendarActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
-        Log.d("CalendarActivity", "Hello World");
+        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null)
+        {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
     }
 }
