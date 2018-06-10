@@ -21,6 +21,7 @@ public class CalendarActivity extends AppCompatActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        Log.d("CalendarActivity", "11111111111111111 ");
     }
 
     @Override
