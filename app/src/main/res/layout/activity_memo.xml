@@ -3,31 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.administrator.memodemo.MemoActivity">
+    android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="vertical"
-        >
-        <FrameLayout
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-            <Button
-                android:id="@+id/btn_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="←"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:textSize="20dp"
-                android:text="备忘录"/>
-        </FrameLayout>
+            android:layout_height="?attr/actionBarSize"
+            android:id="@+id/toolbar"
+            app:title="备忘录"
+            app:titleTextAppearance="@style/Toolbartile"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="+\n新建"
-                android:textSize="20dp"/>
+                android:textSize="20sp"/>
 
         </LinearLayout>
     </LinearLayout>

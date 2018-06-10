@@ -12,10 +12,12 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
@@ -98,11 +100,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case R.id.nav_friends:
                         break;
                     case R.id.nav_setting:
-                        Intent intent_setting = new Intent(MainActivity.this, SettingsActivity.class);
+                        Intent intent_setting = new Intent(MainActivity.this, SettingsActivity
+                                .class);
                         startActivity(intent_setting);
                         break;
                 }
-                mDrawerLayout.closeDrawers();
                 return true;
             }
         });
@@ -118,12 +120,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         editText = findViewById(R.id.edit_text);
-        Button confirm = findViewById(R.id.confirm);
         Button start = findViewById(R.id.start);
         Button stop = findViewById(R.id.stop);
-        confirm.setOnClickListener(this);
         start.setOnClickListener(this);
         stop.setOnClickListener(this);
+
+        Intent login_intent = getIntent();
+        String username = login_intent.getStringExtra("username");
+        View view = navView.getHeaderView(0);
+        TextView tv_username = (TextView) view.findViewById(R.id.nav_username);
+        if (username != null)
+        {
+            tv_username.setText("123");
+            tv_username.setText(username);
+        }
     }
 
     @Override
@@ -143,10 +153,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         switch (v.getId())
         {
-            case R.id.confirm:
-                time = Integer.valueOf(editText.getText().toString());
-                break;
             case R.id.start:
+                time = Integer.valueOf(editText.getText().toString());
                 MyService.isRun = true;
                 Intent startIntant = new Intent(this, MyService.class);
                 startService(startIntant);

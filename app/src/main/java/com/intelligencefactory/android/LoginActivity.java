@@ -2,11 +2,13 @@ package com.intelligencefactory.android;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -26,7 +28,6 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
     private Button bt_pwd_eye;
     private Button bt_login;
     private Button bt_go_register;
-    private Button bt_go_back;
     private boolean isOpen = false;
     String username_text, password_text;
 
@@ -36,8 +37,26 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initView();
+        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null)
+        {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
+    }
 
     private void initView()
     {
@@ -114,8 +133,6 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
         bt_login.setOnClickListener(this);
         bt_go_register = (Button) findViewById(R.id.bt_go_register);
         bt_go_register.setOnClickListener(this);
-        bt_go_back = (Button) findViewById(R.id.bt_go_back);
-        bt_go_back.setOnClickListener(this);
     }
 
     @Override
@@ -150,8 +167,9 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
             case R.id.bt_login:
                 username_text = username.getText().toString();
                 password_text = password.getText().toString();
-                Intent test_setting = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(test_setting);
+                Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
+                intent_login.putExtra("username",username_text);
+                startActivity(intent_login);
                 //密码错误、用户不存在
 
                 break;
@@ -163,8 +181,6 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
                 startActivity(reg);
                 break;
 
-            case R.id.bt_go_back:
-                Toast.makeText(LoginActivity.this, "返回", Toast.LENGTH_SHORT).show();
 
             default:
                 break;

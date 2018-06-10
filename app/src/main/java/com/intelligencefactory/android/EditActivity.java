@@ -3,6 +3,7 @@ package com.intelligencefactory.android;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,9 +30,18 @@ public class EditActivity extends AppCompatActivity implements TimePickerDialog.
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+
+        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null)
+        {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         final Intent intent = getIntent();
         todolist = (Todolist) intent.getSerializableExtra("todolist");
-        getWindow().setTitle(todolist.getTitle());
+        actionBar.setTitle(todolist.getTitle());
         mTimePickerDialog = new TimePickerDialog(EditActivity.this);
 
         todolistTitle = (EditText) findViewById(R.id.todolist_title2);
@@ -104,11 +114,23 @@ public class EditActivity extends AppCompatActivity implements TimePickerDialog.
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
+    }
+
+    @Override
     public void positiveListener()
     {
         Date newdate =new Date();
         newdate.setYear(mTimePickerDialog.getYear()-1900);
-        newdate.setMonth(mTimePickerDialog.getMonth());
+        newdate.setMonth(mTimePickerDialog.getMonth()-1);
         newdate.setDate(mTimePickerDialog.getDay());
         newdate.setMinutes(mTimePickerDialog.getMinute());
         newdate.setHours(mTimePickerDialog.getHour());
@@ -116,8 +138,10 @@ public class EditActivity extends AppCompatActivity implements TimePickerDialog.
         {
             case 0:
                 todolistStarttime.setText(ft.format(newdate));
+                break;
             case 1:
                 todolistEndtime.setText(ft.format(newdate));
+                break;
         }
     }
 

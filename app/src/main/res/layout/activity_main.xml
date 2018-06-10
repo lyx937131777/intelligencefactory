@@ -7,8 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
-
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
@@ -24,6 +22,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:id="@+id/toolbar"
                 android:background="?attr/colorPrimary"
+                app:titleTextAppearance="@style/Toolbartile"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
             </android.support.v7.widget.Toolbar>
@@ -34,12 +33,6 @@
                 android:layout_height="wrap_content"
                 android:hint="输入时间（单位为秒）"
                 android:inputType="number" />
-
-            <Button
-                android:id="@+id/confirm"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="confirm" />
 
             <Button
                 android:id="@+id/start"

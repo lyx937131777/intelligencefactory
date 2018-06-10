@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/account_title"
+
+    <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_height="20dp"
-        android:text="账户设置"/>
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/toolbar"
+        app:title="账户设置"
+        app:titleTextAppearance="@style/Toolbartile"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <RelativeLayout
         android:id="@+id/account_setting"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:layout_below="@id/account_title">
+        android:layout_below="@id/toolbar">
 
         <RelativeLayout
             android:layout_width="match_parent"
