@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.intelligencefactory.android">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name="org.litepal.LitePalApplication"
         android:allowBackup="true"
@@ -19,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".EditActivity" />
-        <activity android:name=".TestActivity" />
+        <activity android:name=".FriendsActivity" />
         <activity android:name=".CalendarActivity"/>
         <activity android:name=".editMemoActivity"/>
         <activity android:name=".MemoActivity"/>

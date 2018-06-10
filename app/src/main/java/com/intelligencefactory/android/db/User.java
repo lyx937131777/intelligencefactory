@@ -7,7 +7,7 @@ public class User extends DataSupport
     private String userID;
     private String password;
     private String nickname;
-    private String phofile_photo;
+    private String profile_photo;
     private String phone_number;
 
     public String getUserID()
@@ -40,14 +40,14 @@ public class User extends DataSupport
         this.nickname = nickname;
     }
 
-    public String getPhofile_photo()
+    public String getProfile_photo()
     {
-        return phofile_photo;
+        return profile_photo;
     }
 
-    public void setPhofile_photo(String phofile_photo)
+    public void setProfile_photo(String profile_photo)
     {
-        this.phofile_photo = phofile_photo;
+        this.profile_photo = profile_photo;
     }
 
     public String getPhone_number()
