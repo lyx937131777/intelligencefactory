@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDrawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navView = findViewById(R.id.nav_view);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        io.feeeei.circleseekbar.CircleSeekBar seekBar = findViewById(R.id.seekbar);
         if (actionBar != null)
         {
             actionBar.setDisplayHomeAsUpEnabled(true);

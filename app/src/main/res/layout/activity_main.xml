@@ -27,6 +27,20 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
             </android.support.v7.widget.Toolbar>
 
+            <io.feeeei.circleseekbar.CircleSeekBar
+                android:id="@+id/seekbar"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"
+                app:wheel_cur_process="0"
+                app:wheel_max_process="120"
+                app:wheel_has_cache="true"
+                app:wheel_reached_color="@color/darkorange"
+                app:wheel_has_pointer_shadow="true"
+                app:wheel_has_wheel_shadow="true"
+                app:wheel_scroll_only_one_circle="false"
+                />
+
             <EditText
                 android:id="@+id/edit_text"
                 android:layout_width="match_parent"
