@@ -120,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-        editText = findViewById(R.id.edit_text);
         Button start = findViewById(R.id.start);
         Button stop = findViewById(R.id.stop);
         start.setOnClickListener(this);

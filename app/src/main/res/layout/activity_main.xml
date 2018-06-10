@@ -41,13 +41,6 @@
                 app:wheel_scroll_only_one_circle="false"
                 />
 
-            <EditText
-                android:id="@+id/edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="输入时间（单位为秒）"
-                android:inputType="number" />
-
             <Button
                 android:id="@+id/start"
                 android:layout_width="match_parent"
