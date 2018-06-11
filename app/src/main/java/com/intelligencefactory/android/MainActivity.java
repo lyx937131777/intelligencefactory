@@ -18,22 +18,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
-import io.feeeei.circleseekbar.CircleSeekBar;
-
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,CircleSeekBar.OnSeekBarChangeListener
+public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
     private DrawerLayout mDrawerLayout;
-    private io.feeeei.circleseekbar.CircleSeekBar seekBar;
-    private TextView text;
-    private Button start;
-    private Button stop;
 
     private static final int MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 1101;
+    private EditText editText;
     public static long time = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -78,9 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDrawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navView = findViewById(R.id.nav_view);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        text = findViewById(R.id.time);
-        seekBar = findViewById(R.id.seekbar);
-        seekBar.setOnSeekBarChangeListener(this);
+        io.feeeei.circleseekbar.CircleSeekBar seekBar = findViewById(R.id.seekbar);
         if (actionBar != null)
         {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -133,8 +121,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-        start = findViewById(R.id.start);
-        stop = findViewById(R.id.stop);
+        Button start = findViewById(R.id.start);
+        Button stop = findViewById(R.id.stop);
         start.setOnClickListener(this);
         stop.setOnClickListener(this);
 
@@ -167,45 +155,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId())
         {
             case R.id.start:
+                time = Integer.valueOf(editText.getText().toString());
                 MyService.isRun = true;
                 Intent startIntant = new Intent(this, MyService.class);
                 startService(startIntant);
-                start.setVisibility(View.INVISIBLE);
-                stop.setVisibility(View.VISIBLE);
-                if (this.time != 0)
-                {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try{
-                                TimeUnit.MINUTES.sleep(MainActivity.time);
-                                MyService.isRun = false;
-                                start.setVisibility(View.INVISIBLE);
-                                stop.setVisibility(View.VISIBLE);
-                            }catch (InterruptedException e){
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
                 break;
             case R.id.stop:
                 MyService.isRun = false;
-                start.setVisibility(View.INVISIBLE);
-                stop.setVisibility(View.VISIBLE);
                 break;
             default:
                 break;
         }
     }
 
-    @Override
-    public void onChanged(CircleSeekBar circleSeekBar, int i) {
-        long curtime = seekBar.getCurProcess();
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-        Date date = new Date(curtime*60*1000);
-        text.setText(format.format(date));
-        time = curtime;
 
-    }
 }
