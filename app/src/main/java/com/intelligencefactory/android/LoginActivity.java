@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
         {
             Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent_login);
+            finish();
         }
     }
 
@@ -188,21 +189,21 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
 
             // TODO 登录按钮
             case R.id.bt_login:
-                if (username_text.matches(Patterns.EMAIL_ADDRESS.toString()) != true)
+                username_text = username.getText().toString();
+                password_text = password.getText().toString();
+                if (!username_text.matches(Patterns.EMAIL_ADDRESS.toString()))
                 {
                     Toast.makeText(LoginActivity.this, "邮箱格式不正确", Toast.LENGTH_LONG).show();
                 }else
                 {
-                    username_text = username.getText().toString();
-                    password_text = password.getText().toString();
                     editor = pref.edit();
                     editor.putString("userID",username_text);
                     editor.putString("password",password_text);
                     editor.apply();
                     Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent_login);
+                    finish();
                 }
-
 
                 /*
                 String address = HttpUtil.LocalAddress + "/Login";

@@ -23,14 +23,30 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <DatePicker
-            android:id="@+id/dateAndTimePicker_datePicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:calendarViewShown="false"
-            android:datePickerMode="calendar" />
+            <CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:firstDayOfWeek="3"
+                android:focusedMonthDateColor="#f00"
+                android:selectedWeekBackgroundColor="#aff"
+                android:shownWeekCount="4"
+                android:unfocusedMonthDateColor="#f9f"
+                android:weekSeparatorLineColor="#ff0" />
+
+            <DatePicker
+                android:id="@+id/dateAndTimePicker_datePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:calendarViewShown="false"
+                android:datePickerMode="calendar"/>
+
+        </LinearLayout>
 
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

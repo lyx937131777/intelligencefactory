@@ -221,7 +221,7 @@ public class RegisterActivity extends AppCompatActivity implements OnClickListen
                 confirm_password_text = confirm_password.getText().toString();
                 nickname_text = nickname.getText().toString();
                 //确认密码不正确、邮箱格式不正确、昵称已被占用
-                if (username_text.matches(Patterns.EMAIL_ADDRESS.toString()) != true)
+                if (!username_text.matches(Patterns.EMAIL_ADDRESS.toString()))
                 {
                     Toast.makeText(RegisterActivity.this, "请输入正确的邮箱", Toast.LENGTH_LONG).show();
                 } else if (password_text.length() < 6)

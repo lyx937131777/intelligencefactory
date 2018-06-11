@@ -1,5 +1,6 @@
 package com.intelligencefactory.android;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -78,12 +79,23 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 toggleSwtich(bt_show_toggle, "锁屏显示to-do list", "锁屏不显示");
                 break;
             case R.id.logout:
+                if(MyService.isRun)
+                {
+                    new AlertDialog.Builder(this)
+                            .setTitle("警告")
+                            .setMessage("你现在正在享受寂静，无法登出！")
+                            .setPositiveButton("确定", null)
+                            .show();
+                    break;
+                }
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
                 editor.remove("userID");
                 editor.remove("password");
                 editor.apply();
                 Intent intent_logout = new Intent(SettingsActivity.this, LoginActivity.class);
                 startActivity(intent_logout);
+                MainActivity.instance.finish();
+                finish();
             default:
                 break;
         }

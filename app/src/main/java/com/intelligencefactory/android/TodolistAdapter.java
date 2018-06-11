@@ -44,7 +44,7 @@ public class TodolistAdapter extends ArrayAdapter<Todolist>
             viewHolder = (ViewHolder)view.getTag();
         }
 
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd  hh:mm");
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd  HH:mm");
 
         viewHolder.todolistTime.setText(ft.format(todolist.getStarttime())+" / "+ft.format(todolist.getEndtime()));
         viewHolder.todolistTitle.setText(todolist.getTitle());
