@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="90dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ic_friend"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"/>
+
+    <TextView
+        android:id="@+id/nickname_friend"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:textSize="30sp"
+        android:layout_marginLeft="15dp"
+        android:gravity="center_vertical"/>
+
+</LinearLayout>

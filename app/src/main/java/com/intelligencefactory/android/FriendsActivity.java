@@ -1,9 +1,13 @@
 package com.intelligencefactory.android;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.intelligencefactory.android.db.User;
 import com.intelligencefactory.android.util.HttpUtil;
@@ -12,6 +16,7 @@ import com.intelligencefactory.android.util.Utility;
 import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
@@ -20,6 +25,8 @@ import okhttp3.Response;
 
 public class FriendsActivity extends AppCompatActivity
 {
+    private ArrayList<User> friendList = new ArrayList<>();
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,8 +40,19 @@ public class FriendsActivity extends AppCompatActivity
         {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        /*
+        for(int i = 0; i< 10 ;i++)
+        {
+            User user = new User();
+            user.setUserID(i+"@qq.com");
+            user.setPassword("111111");
+            user.setPhone_number("123456789");
+            user.setNickname(i+""+i+""+i);
+            user.setProfile_photo(HttpUtil.LocalAddress+"/images/rushhour.jpg");
+            friendList.add(user);
+        }
+        */
 
-        //测试连接服务器
         Log.e("test","Start!!!!!");
         String address = HttpUtil.LocalAddress + "/Query";
         HttpUtil.sendOkHttpRequest(address, new Callback()
@@ -51,19 +69,26 @@ public class FriendsActivity extends AppCompatActivity
                 final String responseData = response.body().string();
                 Log.e("test",responseData);
                 Utility.handleUserResponse(responseData);
+                runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        friendList =(ArrayList<User>) DataSupport.findAll(User.class);
+                        FriendsAdapter friendsAdapter = new FriendsAdapter(FriendsActivity.this, R.layout.friend_item, friendList);
+                        listView.setAdapter(friendsAdapter);
+                    }
+                });
+
             }
         });
 
         Log.e("test","End!!!!!!!!");
-        List<User> userlist = DataSupport.findAll(User.class);
-        for(User user : userlist)
-        {
-            Log.e("test", "userID : "+user.getUserID());
-            Log.e("test", "password : "+user.getPassword());
-            Log.e("test", "nickname : "+user.getNickname());
-            Log.e("test", "phone_number : "+user.getPhone_number());
-            Log.e("test", "profile_photo : "+user.getProfile_photo());
-        }
+        friendList =(ArrayList<User>) DataSupport.findAll(User.class);
+
+        FriendsAdapter friendsAdapter = new FriendsAdapter(this, R.layout.friend_item, friendList);
+        listView = (ListView) findViewById(R.id.friend_list);
+        listView.setAdapter(friendsAdapter);
     }
 
     @Override
@@ -74,7 +99,18 @@ public class FriendsActivity extends AppCompatActivity
             case android.R.id.home:
                 finish();
                 break;
+            case R.id.menu_add:
+                Toast.makeText(this,"add!!!!",Toast.LENGTH_LONG).show();
+                //Intent intent = new Intent(this, NewFriendActivity.class);
+                //startActivity(intent);
+                break;
         }
         return true;
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.add_menu, menu);
+        return true;
+    }
+
 }

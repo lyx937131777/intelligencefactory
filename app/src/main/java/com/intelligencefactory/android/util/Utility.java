@@ -9,6 +9,7 @@ import com.intelligencefactory.android.db.User;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 
 public class Utility
 {
@@ -18,6 +19,7 @@ public class Utility
         {
             try
             {
+                DataSupport.deleteAll(User.class);
                 JSONArray allUsers = new JSONArray(response);
                 for (int i = 0; i < allUsers.length(); i++)
                 {
