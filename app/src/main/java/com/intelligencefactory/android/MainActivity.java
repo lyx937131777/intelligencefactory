@@ -1,13 +1,10 @@
 package com.intelligencefactory.android;
 
-import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -18,8 +15,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -30,15 +29,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 {
     private DrawerLayout mDrawerLayout;
     private io.feeeei.circleseekbar.CircleSeekBar seekBar;
-    private TextView text2;
     private TextView text;
     private Button start;
     private Button stop;
 
-    private static final int SERVICE_STOP = 23333;
-    private static final int TIME_JUMP = 2333;
     private static final int MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 1101;
-    public static long curtime = 0;
     public static long time = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -84,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         NavigationView navView = findViewById(R.id.nav_view);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         text = findViewById(R.id.time);
-        text2 = findViewById(R.id.text2);
         seekBar = findViewById(R.id.seekbar);
         seekBar.setOnSeekBarChangeListener(this);
         if (actionBar != null)
@@ -147,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent login_intent = getIntent();
         String username = login_intent.getStringExtra("username");
         View view = navView.getHeaderView(0);
-        TextView tv_username = view.findViewById(R.id.nav_username);
+        TextView tv_username = (TextView) view.findViewById(R.id.nav_username);
         if (username != null)
         {
             tv_username.setText("123");
@@ -173,20 +167,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId())
         {
             case R.id.start:
-                time = curtime;
-                if(time==0){
-                    new AlertDialog.Builder(this)
-                            .setTitle("提示")
-                            .setMessage("请选择持续时间！")
-                            .setPositiveButton("确定", null)
-                            .show();
-                    break;
-                }
                 MyService.isRun = true;
                 Intent startIntant = new Intent(this, MyService.class);
                 startService(startIntant);
-                seekBar.setVisibility(View.INVISIBLE);
-                text2.setVisibility(View.VISIBLE);
                 start.setVisibility(View.INVISIBLE);
                 stop.setVisibility(View.VISIBLE);
                 if (this.time != 0)
@@ -197,75 +180,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             try{
                                 TimeUnit.MINUTES.sleep(MainActivity.time);
                                 MyService.isRun = false;
+                                start.setVisibility(View.INVISIBLE);
+                                stop.setVisibility(View.VISIBLE);
                             }catch (InterruptedException e){
                                 e.printStackTrace();
                             }
                         }
-                    }).start();
-
-                    //mainactivity倒计时
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            for(long i = MainActivity.time;i>0;i--){
-                                try {
-                                    TimeUnit.MINUTES.sleep(1);
-                                    Message msg = new Message();
-                                    msg.what = TIME_JUMP;
-                                    mHandler.sendMessage(msg);
-
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            Message msg = new Message();
-                            msg.what = SERVICE_STOP;
-                            mHandler.sendMessage(msg);
-                        }
-                    }).start();
+                    });
                 }
                 break;
-
             case R.id.stop:
                 MyService.isRun = false;
-                Message msg = new Message();
-                msg.what = SERVICE_STOP;
-                mHandler.sendMessage(msg);
+                start.setVisibility(View.INVISIBLE);
+                stop.setVisibility(View.VISIBLE);
                 break;
             default:
                 break;
         }
     }
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case SERVICE_STOP:
-                    seekBar.setVisibility(View.VISIBLE);
-                    text2.setVisibility(View.INVISIBLE);
-                    start.setVisibility(View.VISIBLE);
-                    stop.setVisibility(View.INVISIBLE);
-                    seekBar.setCurProcess(0);
-                    break;
-                case TIME_JUMP:
-                    curtime--;
-                    SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-                    Date date = new Date(curtime*60*1000);
-                    text.setText(format.format(date));
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-
     @Override
     public void onChanged(CircleSeekBar circleSeekBar, int i) {
-        curtime = seekBar.getCurProcess();
+        long curtime = seekBar.getCurProcess();
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         Date date = new Date(curtime*60*1000);
         text.setText(format.format(date));
+        time = curtime;
 
     }
 }
