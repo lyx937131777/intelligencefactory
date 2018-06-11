@@ -1,6 +1,5 @@
 package com.intelligencefactory.android;
 
-import android.app.AlarmManager;
 import android.app.Service;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
@@ -9,10 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
-import android.os.SystemClock;
 import android.util.Log;
 
 import java.util.HashSet;
@@ -23,7 +19,6 @@ import java.util.concurrent.TimeUnit;
 public class MyService extends Service
 {
 
-    private static final int STOP_SERVICE = 233;
     private MyThread myThread = null;
     private Thread newThread = null;
     public static boolean isRun = true;
@@ -82,11 +77,11 @@ public class MyService extends Service
             if (launcherList != null && defaultLauncher != null)
             {
                 String pkgName = defaultLauncher.activityInfo.packageName;
-                Log.e("MyService:", "default launcher is : " + pkgName);
+                Log.d("MyService:", "default launcher is : " + pkgName);
                 // 没有指定默认桌面时返回的是“android”，故这里过滤下防止“android”被添加到默认桌面列表中
                 for (ResolveInfo info : launcherList)
                 {
-                    Log.e("MyService:", "launcher : " + info.activityInfo.packageName);
+                    Log.d("MyService:", "launcher : " + info.activityInfo.packageName);
                     if (info.activityInfo.packageName.equals(pkgName))
                     {
                         defaultLaunchers.add(pkgName);
@@ -101,7 +96,7 @@ public class MyService extends Service
                     defaultLaunchers.add(resolveInfo.activityInfo.packageName);
                 }
             }
-            Log.e("MyService:", "defaultLaunchers : " + defaultLaunchers);
+            Log.d("MyService:", "defaultLaunchers : " + defaultLaunchers);
             return defaultLaunchers;
         }
 
@@ -130,7 +125,7 @@ public class MyService extends Service
                         }
                         topActivity = stats.get(j).getPackageName();
                     }
-                    Log.e("MyService", "top running app is : " + topActivity);
+                    Log.d("MyService", "top running app is : " + topActivity);
 
                 }
             }
@@ -151,7 +146,7 @@ public class MyService extends Service
         myThread = new MyThread(this);
         newThread = new Thread(myThread);
         newThread.start();
-        Log.e("MyService", "Service is start.");
+        Log.d("MyService", "Service is start.");
 
 
 
@@ -161,7 +156,7 @@ public class MyService extends Service
     public void onDestroy()
     {
         super.onDestroy();
-        Log.e("MyService", "Service is stop.");
+        Log.d("MyService", "Service is stop.");
         MainActivity.time = 0;
     }
 
