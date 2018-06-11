@@ -1,5 +1,6 @@
 package com.intelligencefactory.android;
 
+import android.app.AlarmManager;
 import android.app.Service;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
@@ -8,7 +9,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.SystemClock;
 import android.util.Log;
 
 import java.util.HashSet;
@@ -19,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class MyService extends Service
 {
 
+    private static final int STOP_SERVICE = 233;
     private MyThread myThread = null;
     private Thread newThread = null;
     public static boolean isRun = true;
@@ -62,7 +67,7 @@ public class MyService extends Service
         }
 
         //获取当前系统的默认桌面包名
-        public Set<String> getDefaultLaunchers()
+        private Set<String> getDefaultLaunchers()
         {
             Set<String> defaultLaunchers = new HashSet<String>();
             PackageManager packageManager = getPackageManager();
@@ -104,8 +109,7 @@ public class MyService extends Service
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             {
-                UsageStatsManager m = (UsageStatsManager) context.getSystemService(Context
-                        .USAGE_STATS_SERVICE);
+                UsageStatsManager m = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
                 if (m != null)
                 {
                     long now = System.currentTimeMillis();
@@ -148,17 +152,9 @@ public class MyService extends Service
         newThread = new Thread(myThread);
         newThread.start();
         Log.e("MyService", "Service is start.");
-        if (MainActivity.time != 0)
-        {
-            try
-            {
-                TimeUnit.SECONDS.sleep(MainActivity.time);
-                isRun = false;
-            } catch (InterruptedException e)
-            {
-                e.printStackTrace();
-            }
-        }
+
+
+
     }
 
     @Override
@@ -166,6 +162,7 @@ public class MyService extends Service
     {
         super.onDestroy();
         Log.e("MyService", "Service is stop.");
+        MainActivity.time = 0;
     }
 
 }

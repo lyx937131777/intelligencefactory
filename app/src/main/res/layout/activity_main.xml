@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -32,28 +32,54 @@
                 android:layout_width="300dp"
                 android:layout_height="300dp"
                 android:layout_gravity="center"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:wheel_cur_process="0"
-                app:wheel_max_process="120"
                 app:wheel_has_cache="true"
-                app:wheel_reached_color="@color/darkorange"
                 app:wheel_has_pointer_shadow="true"
-                app:wheel_has_wheel_shadow="true"
-                app:wheel_scroll_only_one_circle="false"
+                app:wheel_max_process="120"
+                app:wheel_reached_color="@color/darkorange"
+                app:wheel_scroll_only_one_circle="true"
+                app:wheel_can_touch="true"
+                />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="40sp"
+                android:text="00:00"
+                app:layout_constraintStart_toStartOf="@id/seekbar"
+                app:layout_constraintEnd_toEndOf="@id/seekbar"
+                app:layout_constraintTop_toTopOf="@id/seekbar"
+                app:layout_constraintBottom_toBottomOf="@id/seekbar"
                 />
 
             <Button
                 android:id="@+id/start"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="start" />
+                android:layout_height="40dp"
+                android:text="开始"
+                android:background="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/seekbar"/>
 
             <Button
                 android:id="@+id/stop"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="stop" />
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/colorPrimary"
+                app:layout_constraintTop_toTopOf="@id/start"
+                android:text="结束"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:visibility="invisible"
+                />
 
-        </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
 
         <android.support.design.widget.NavigationView
             android:layout_width="match_parent"
