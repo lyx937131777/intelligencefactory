@@ -62,7 +62,7 @@ public class MyService extends Service
         }
 
         //获取当前系统的默认桌面包名
-        public Set<String> getDefaultLaunchers()
+        private Set<String> getDefaultLaunchers()
         {
             Set<String> defaultLaunchers = new HashSet<String>();
             PackageManager packageManager = getPackageManager();
@@ -77,11 +77,11 @@ public class MyService extends Service
             if (launcherList != null && defaultLauncher != null)
             {
                 String pkgName = defaultLauncher.activityInfo.packageName;
-                Log.e("MyService:", "default launcher is : " + pkgName);
+                Log.d("MyService:", "default launcher is : " + pkgName);
                 // 没有指定默认桌面时返回的是“android”，故这里过滤下防止“android”被添加到默认桌面列表中
                 for (ResolveInfo info : launcherList)
                 {
-                    Log.e("MyService:", "launcher : " + info.activityInfo.packageName);
+                    Log.d("MyService:", "launcher : " + info.activityInfo.packageName);
                     if (info.activityInfo.packageName.equals(pkgName))
                     {
                         defaultLaunchers.add(pkgName);
@@ -96,7 +96,7 @@ public class MyService extends Service
                     defaultLaunchers.add(resolveInfo.activityInfo.packageName);
                 }
             }
-            Log.e("MyService:", "defaultLaunchers : " + defaultLaunchers);
+            Log.d("MyService:", "defaultLaunchers : " + defaultLaunchers);
             return defaultLaunchers;
         }
 
@@ -104,8 +104,7 @@ public class MyService extends Service
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             {
-                UsageStatsManager m = (UsageStatsManager) context.getSystemService(Context
-                        .USAGE_STATS_SERVICE);
+                UsageStatsManager m = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
                 if (m != null)
                 {
                     long now = System.currentTimeMillis();
@@ -126,7 +125,7 @@ public class MyService extends Service
                         }
                         topActivity = stats.get(j).getPackageName();
                     }
-                    Log.e("MyService", "top running app is : " + topActivity);
+                    Log.d("MyService", "top running app is : " + topActivity);
 
                 }
             }
@@ -147,25 +146,18 @@ public class MyService extends Service
         myThread = new MyThread(this);
         newThread = new Thread(myThread);
         newThread.start();
-        Log.e("MyService", "Service is start.");
-        if (MainActivity.time != 0)
-        {
-            try
-            {
-                TimeUnit.SECONDS.sleep(MainActivity.time);
-                isRun = false;
-            } catch (InterruptedException e)
-            {
-                e.printStackTrace();
-            }
-        }
+        Log.d("MyService", "Service is start.");
+
+
+
     }
 
     @Override
     public void onDestroy()
     {
         super.onDestroy();
-        Log.e("MyService", "Service is stop.");
+        Log.d("MyService", "Service is stop.");
+        MainActivity.time = 0;
     }
 
 }
