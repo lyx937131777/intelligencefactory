@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +13,16 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.intelligencefactory.android.util.HttpUtil;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class RegisterActivity extends AppCompatActivity implements OnClickListener
 {
@@ -216,15 +227,71 @@ public class RegisterActivity extends AppCompatActivity implements OnClickListen
                 } else if (password_text.length() < 6)
                 {
                     Toast.makeText(RegisterActivity.this, "请输入至少6位的密码", Toast.LENGTH_LONG).show();
-                } else if (!password.getText().toString().equals(confirm_password.getText().toString()))
+                } else if (!password.getText().toString().equals(confirm_password.getText()
+                        .toString()))
                 {
-                    Toast.makeText(RegisterActivity.this, "两次密码输入不一致", Toast.LENGTH_SHORT).show();
-                }
+                    Toast.makeText(RegisterActivity.this, "两次密码输入不一致", Toast.LENGTH_LONG).show();
+                } else if (nickname_text.length() < 1)
+                {
+                    Toast.makeText(RegisterActivity.this, "昵称不得为空", Toast.LENGTH_LONG).show();
+                } else
+                {
+                    Log.e("Register", nickname_text);
+                    String nickname_gbk = null;
+                    String nickname_utf = null;
+                    try
+                    {
+                        nickname_gbk = URLEncoder.encode(nickname_text, "GBK");
+                        Log.e("Register", nickname_gbk);
+                    } catch (UnsupportedEncodingException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    try
+                    {
+                        nickname_utf = URLEncoder.encode(nickname_text, "UTF-8");
+                        Log.e("Register", nickname_utf);
+                    } catch (UnsupportedEncodingException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    String address = HttpUtil.LocalAddress + "/Register";
+                    HttpUtil.registerRequest(address, username_text, password_text,
+                            nickname_text, new Callback()
+                            {
+                                @Override
+                                public void onFailure(Call call, IOException e)
+                                {
+                                    e.printStackTrace();
+                                    Log.e("Register", "Faled!!!!!!!!!");
+                                }
 
+                                @Override
+                                public void onResponse(Call call, Response response) throws
+                                        IOException
+                                {
+                                    final String responseData = response.body().string();
+                                    Log.e("Register", "源码 " + responseData);
+                                    if(response.equals("true"))
+                                    {
+
+                                    }else if(response.equals("same"))
+                                    {
+
+                                    }else
+                                    {
+
+                                    }
+                                }
+                            });
+                }
                 break;
 
             default:
                 break;
         }
+
+
     }
 }
+

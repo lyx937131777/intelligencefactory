@@ -3,8 +3,10 @@ package com.intelligencefactory.android;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 1101;
     private EditText editText;
     public static long time = 0;
+    private SharedPreferences pref;
+    String username;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -126,13 +130,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         start.setOnClickListener(this);
         stop.setOnClickListener(this);
 
-        Intent login_intent = getIntent();
-        String username = login_intent.getStringExtra("username");
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
+        username = pref.getString("userID",null);
         View view = navView.getHeaderView(0);
         TextView tv_username = (TextView) view.findViewById(R.id.nav_username);
         if (username != null)
         {
-            tv_username.setText("123");
             tv_username.setText(username);
         }
     }
@@ -155,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId())
         {
             case R.id.start:
-                time = Integer.valueOf(editText.getText().toString());
+                //time = Integer.valueOf(editText.getText().toString());
                 MyService.isRun = true;
                 Intent startIntant = new Intent(this, MyService.class);
                 startService(startIntant);

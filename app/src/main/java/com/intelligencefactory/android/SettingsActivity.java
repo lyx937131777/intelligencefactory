@@ -1,6 +1,9 @@
 package com.intelligencefactory.android;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -11,7 +14,7 @@ import android.widget.ToggleButton;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener
 {
-    Button bt_cloud_update;
+    Button bt_cloud_update,bt_logout;
     ToggleButton bt_ring_toggle, bt_show_toggle, bt_vibrate_toggle, bt_white_list_toggle;
 
     @Override
@@ -53,6 +56,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         bt_show_toggle.setOnClickListener(this);
         bt_white_list_toggle = (ToggleButton) findViewById(R.id.bt_white_list_toggle);
         bt_white_list_toggle.setOnClickListener(this);
+        bt_logout = (Button) findViewById(R.id.logout);
+        bt_logout.setOnClickListener(this);
     }
 
     @Override
@@ -72,7 +77,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             case R.id.bt_show_toggle:
                 toggleSwtich(bt_show_toggle, "锁屏显示to-do list", "锁屏不显示");
                 break;
-
+            case R.id.logout:
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+                editor.remove("userID");
+                editor.remove("password");
+                editor.apply();
+                Intent intent_logout = new Intent(SettingsActivity.this, LoginActivity.class);
+                startActivity(intent_logout);
             default:
                 break;
         }

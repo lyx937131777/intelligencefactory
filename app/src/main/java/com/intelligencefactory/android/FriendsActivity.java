@@ -5,10 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.intelligencefactory.android.db.User;
 import com.intelligencefactory.android.util.HttpUtil;
 import com.intelligencefactory.android.util.Utility;
 
+import org.litepal.crud.DataSupport;
+
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -31,7 +35,8 @@ public class FriendsActivity extends AppCompatActivity
         }
 
         //测试连接服务器
-        String address = "http://192.168.1.102:8080/Query";
+        Log.e("test","Start!!!!!");
+        String address = HttpUtil.LocalAddress + "/Query";
         HttpUtil.sendOkHttpRequest(address, new Callback()
         {
             @Override
@@ -43,10 +48,22 @@ public class FriendsActivity extends AppCompatActivity
             @Override
             public void onResponse(Call call, Response response) throws IOException
             {
-                final String a = response.body().string();
-                Utility.handleUserResponse(a);
+                final String responseData = response.body().string();
+                Log.e("test",responseData);
+                Utility.handleUserResponse(responseData);
             }
         });
+
+        Log.e("test","End!!!!!!!!");
+        List<User> userlist = DataSupport.findAll(User.class);
+        for(User user : userlist)
+        {
+            Log.e("test", "userID : "+user.getUserID());
+            Log.e("test", "password : "+user.getPassword());
+            Log.e("test", "nickname : "+user.getNickname());
+            Log.e("test", "phone_number : "+user.getPhone_number());
+            Log.e("test", "profile_photo : "+user.getProfile_photo());
+        }
     }
 
     @Override

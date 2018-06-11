@@ -1,19 +1,31 @@
 package com.intelligencefactory.android;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.intelligencefactory.android.util.HttpUtil;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * 登录界面Demo
@@ -31,6 +43,9 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
     private boolean isOpen = false;
     String username_text, password_text;
 
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -43,6 +58,14 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
         if (actionBar != null)
         {
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
+        username_text = pref.getString("userID",null);
+        password_text = pref.getString("password",null);
+        if(username_text != null & password_text != null)
+        {
+            Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent_login);
         }
     }
 
@@ -165,15 +188,51 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
 
             // TODO 登录按钮
             case R.id.bt_login:
-                username_text = username.getText().toString();
-                password_text = password.getText().toString();
-                Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
-                intent_login.putExtra("username",username_text);
-                startActivity(intent_login);
-                //密码错误、用户不存在
+                if (username_text.matches(Patterns.EMAIL_ADDRESS.toString()) != true)
+                {
+                    Toast.makeText(LoginActivity.this, "邮箱格式不正确", Toast.LENGTH_LONG).show();
+                }else
+                {
+                    username_text = username.getText().toString();
+                    password_text = password.getText().toString();
+                    editor = pref.edit();
+                    editor.putString("userID",username_text);
+                    editor.putString("password",password_text);
+                    editor.apply();
+                    Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent_login);
+                }
+
+
+                /*
+                String address = HttpUtil.LocalAddress + "/Login";
+                HttpUtil.loginRequest(address, username_text, password_text, new Callback()
+                {
+                    @Override
+                    public void onFailure(Call call, IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException
+                    {
+                        final String responsDate = response.body().string();
+                        Log.e("Login",responsDate);
+                        if(responsDate.equals("true"))
+                        {
+                            editor = pref.edit();
+                            editor.putString("userID",username_text);
+                            editor.putString("password",password_text);
+                            editor.apply();
+                            Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent_login);
+                        }
+                    }
+                });
+                */
 
                 break;
-
             // 注册按钮
             case R.id.bt_go_register:
                 Intent reg = new Intent();
