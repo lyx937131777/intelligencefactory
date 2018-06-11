@@ -249,10 +249,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     seekBar.setCurProcess(0);
                     break;
                 case TIME_JUMP:
-                    curtime--;
-                    SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-                    Date date = new Date(curtime*60*1000);
-                    text.setText(format.format(date));
+                    if(MyService.isRun){
+                        curtime--;
+                        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                        Date date = new Date(curtime*60*1000);
+                        text.setText(format.format(date));
+                    }
                     break;
                 default:
                     break;
