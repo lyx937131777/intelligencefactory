@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
@@ -29,17 +29,16 @@
         </activity>
         <activity android:name=".EditActivity" />
         <activity android:name=".FriendsActivity" />
-        <activity android:name=".CalendarActivity"/>
-        <activity android:name=".editMemoActivity"/>
-        <activity android:name=".MemoActivity"/>
-        <activity android:name=".TodolistActivity"/>
-        <activity android:name=".RegisterActivity"/>
-        <activity android:name=".SettingsActivity"/>
+        <activity android:name=".CalendarActivity" />
+        <activity android:name=".editMemoActivity" />
+        <activity android:name=".MemoActivity" />
+        <activity android:name=".TodolistActivity" />
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".SettingsActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".EditUserInfoActivity" />
         <activity android:name=".UserInfoActivity" />
         <activity android:name=".ModifyPasswordActivity" />
-
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -54,8 +53,9 @@
         <service
             android:name=".MyService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
 
+        <activity android:name=".WhiteListActivity"></activity>
     </application>
 
 </manifest>

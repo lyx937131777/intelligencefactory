@@ -59,6 +59,9 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Intent intent_whitlist = new Intent(LoginActivity.this, WhiteListActivity
+                .class);
+        startActivity(intent_whitlist);
         PermissionsUtil.verifyStoragePermissions(this);
         initView();
         android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
