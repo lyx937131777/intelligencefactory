@@ -3,15 +3,15 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_calendar"
-            android:icon="@drawable/nav_call"
+            android:icon="@drawable/calender"
             android:title="我的日历" />
         <item
             android:id="@+id/nav_todolist"
-            android:icon="@drawable/nav_mail"
+            android:icon="@drawable/todo_list"
             android:title="Todolist" />
         <item
             android:id="@+id/nav_memo"
-            android:icon="@drawable/nav_location"
+            android:icon="@drawable/memo"
             android:title="备忘录" />
         <item
             android:id="@+id/nav_friends"
@@ -19,7 +19,7 @@
             android:title="我的好友" />
         <item
             android:id="@+id/nav_setting"
-            android:icon="@drawable/nav_task"
+            android:icon="@drawable/setting"
             android:title="设置"/>
     </group>
 </menu>

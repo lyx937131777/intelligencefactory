@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:textColor="#ff0000"
+        android:textColor="@color/gray"
         android:layout_gravity="bottom"
         android:layout_marginTop="20dp"/>
 
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:textSize="36sp"
-        android:textColor="#00ff00"
+        android:textColor="@color/colorPrimary"
         android:layout_gravity="right|center_vertical"
         android:layout_marginRight="10dp"/>
 

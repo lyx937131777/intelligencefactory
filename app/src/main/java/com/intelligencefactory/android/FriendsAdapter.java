@@ -51,8 +51,8 @@ public class FriendsAdapter extends ArrayAdapter<User>
         viewHolder.userName.setText(user.getNickname());
         String photo = user.getProfile_photo();
 //        这里用Glide
-        //Glide.with(myContext).load(HttpUtil.LocalAddress + photo).into(viewHolder.userIcon);
-        Glide.with(myContext).load(R.drawable.nav_icon).into(viewHolder.userIcon);
+        Glide.with(myContext).load(HttpUtil.LocalAddress +"/"+ photo).into(viewHolder.userIcon);
+        //Glide.with(myContext).load(R.drawable.nav_icon).into(viewHolder.userIcon);
         return view;
     }
 

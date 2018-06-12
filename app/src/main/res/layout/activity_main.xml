@@ -35,14 +35,14 @@
                 app:layout_constraintTop_toBottomOf="@id/toolbar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="60dp"
                 app:wheel_cur_process="0"
                 app:wheel_has_cache="true"
                 app:wheel_has_pointer_shadow="true"
                 app:wheel_max_process="120"
                 app:wheel_reached_color="@color/darkorange"
                 app:wheel_scroll_only_one_circle="true"
-                app:wheel_can_touch="true"
-                />
+                app:wheel_can_touch="true" />
 
             <TextView
                 android:id="@+id/text2"
@@ -64,8 +64,7 @@
                 app:layout_constraintStart_toStartOf="@id/seekbar"
                 app:layout_constraintEnd_toEndOf="@id/seekbar"
                 app:layout_constraintTop_toTopOf="@id/seekbar"
-                app:layout_constraintBottom_toBottomOf="@id/seekbar"
-                />
+                app:layout_constraintBottom_toBottomOf="@id/seekbar" />
 
             <Button
                 android:id="@+id/start"
@@ -75,7 +74,8 @@
                 android:background="@color/colorPrimary"
                 android:textSize="18sp"
                 android:textColor="@color/white"
-                app:layout_constraintTop_toBottomOf="@id/seekbar"/>
+                app:layout_constraintTop_toBottomOf="@id/seekbar"
+                android:layout_marginTop="60dp" />
 
             <Button
                 android:id="@+id/stop"
@@ -86,8 +86,7 @@
                 android:text="结束"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                android:visibility="invisible"
-                />
+                android:visibility="invisible" />
 
         </android.support.constraint.ConstraintLayout>
 

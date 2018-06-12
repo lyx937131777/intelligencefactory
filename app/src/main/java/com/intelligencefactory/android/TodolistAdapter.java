@@ -7,7 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.intelligencefactory.android.db.Todolist;
+
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,7 +51,18 @@ public class TodolistAdapter extends ArrayAdapter<Todolist>
 
         viewHolder.todolistTime.setText(ft.format(todolist.getStarttime())+" / "+ft.format(todolist.getEndtime()));
         viewHolder.todolistTitle.setText(todolist.getTitle());
-        viewHolder.todolistState.setText(todolist.getState());
+        Date now = new Date();
+        if(todolist.getStarttime().after(now))
+        {
+            viewHolder.todolistState.setText("Waiting");
+        }else if(todolist.getEndtime().after(now))
+        {
+            viewHolder.todolistState.setText("Running");
+        }else
+        {
+            viewHolder.todolistState.setText("Ended");
+        }
+
         return view ;
     }
 

@@ -208,6 +208,15 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
                     Toast.makeText(LoginActivity.this, "密码位数不正确", Toast.LENGTH_LONG).show();
                 }else
                 {
+                    /*
+                    editor = pref.edit();
+                    editor.putString("userID",username_text);
+                    editor.putString("password",password_text);
+                    editor.apply();
+                    Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent_login);
+                    finish();
+                    */
                     String address = HttpUtil.LocalAddress + "/Login";
                     HttpUtil.loginRequest(address, username_text, password_text, new Callback()
                     {
@@ -272,6 +281,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
                             }
                         }
                     });
+
                 }
                 break;
             // 注册按钮

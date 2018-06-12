@@ -1,7 +1,9 @@
 package com.intelligencefactory.android;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -27,6 +29,8 @@ public class FriendsActivity extends AppCompatActivity
 {
     private ArrayList<User> friendList = new ArrayList<>();
     private ListView listView;
+    private SharedPreferences pref;
+    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,9 +57,12 @@ public class FriendsActivity extends AppCompatActivity
         }
         */
 
-        Log.e("test","Start!!!!!");
-        String address = HttpUtil.LocalAddress + "/Query";
-        HttpUtil.sendOkHttpRequest(address, new Callback()
+        Log.e("test", "Start!!!!!");
+        listView = (ListView) findViewById(R.id.friend_list);
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
+        userID = pref.getString("userID", null);
+        final String address = HttpUtil.LocalAddress + "/QueryFriends";
+        HttpUtil.myfriendsRequest(address, userID, new Callback()
         {
             @Override
             public void onFailure(Call call, IOException e)
@@ -67,28 +74,52 @@ public class FriendsActivity extends AppCompatActivity
             public void onResponse(Call call, Response response) throws IOException
             {
                 final String responseData = response.body().string();
-                Log.e("test",responseData);
-                Utility.handleUserResponse(responseData);
-                runOnUiThread(new Runnable()
+                Log.e("test", responseData);
+                ArrayList<String> userIDs = Utility.findPair(responseData);
+                for (final String string : userIDs)
                 {
-                    @Override
-                    public void run()
+                    String address = HttpUtil.LocalAddress + "/QueryUserInfo";
+                    HttpUtil.searchKeyRequest(address, string, new Callback()
                     {
-                        friendList =(ArrayList<User>) DataSupport.findAll(User.class);
-                        FriendsAdapter friendsAdapter = new FriendsAdapter(FriendsActivity.this, R.layout.friend_item, friendList);
-                        listView.setAdapter(friendsAdapter);
-                    }
-                });
+                        @Override
+                        public void onFailure(Call call, IOException e)
+                        {
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException
+                        {
+                            final String responseData = response.body().string();
+                            Log.e("FriendsActivity", responseData);
+                            User user = Utility.storeLoginUser(responseData, string);
+                            friendList.add(user);
+                            runOnUiThread(new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    FriendsAdapter friendsAdapter = new FriendsAdapter
+                                            (FriendsActivity.this, R.layout.friend_item,
+                                                    friendList);
+                                    listView.setAdapter(friendsAdapter);
+                                }
+                            });
+                        }
+                    });
+                }
 
             }
         });
 
-        Log.e("test","End!!!!!!!!");
-        friendList =(ArrayList<User>) DataSupport.findAll(User.class);
+        Log.e("test", "End!!!!!!!!");
+        /*
+        friendList = (ArrayList<User>) DataSupport.findAll(User.class);
 
         FriendsAdapter friendsAdapter = new FriendsAdapter(this, R.layout.friend_item, friendList);
         listView = (ListView) findViewById(R.id.friend_list);
         listView.setAdapter(friendsAdapter);
+        */
     }
 
     @Override
@@ -100,15 +131,17 @@ public class FriendsActivity extends AppCompatActivity
                 finish();
                 break;
             case R.id.menu_add:
-                Toast.makeText(this,"add!!!!",Toast.LENGTH_LONG).show();
-                //Intent intent = new Intent(this, NewFriendActivity.class);
-                //startActivity(intent);
+                //Toast.makeText(this,"add!!!!",Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, NewFriendActivity.class);
+                startActivity(intent);
                 break;
         }
         return true;
     }
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         getMenuInflater().inflate(R.menu.add_menu, menu);
         return true;
     }

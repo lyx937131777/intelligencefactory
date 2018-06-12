@@ -9,6 +9,10 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.intelligencefactory.android.db.Todolist;
+
+import org.litepal.crud.DataSupport;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +46,8 @@ public class TodolistActivity extends AppCompatActivity
             {
                 todolist = todolistList.get(position);
                 Intent intent = new Intent(TodolistActivity.this, EditActivity.class);
-                intent.putExtra("todolist",todolist);
+                int tID = todolist.getId();
+                intent.putExtra("tID",tID);
                 startActivityForResult(intent,1);
             }
         });
@@ -52,11 +57,7 @@ public class TodolistActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                Date startdate = new Date();
-                Date enddate = new Date();
-                Todolist task = new Todolist("NewTask",startdate,enddate);
                 Intent intent = new Intent(TodolistActivity.this, EditActivity.class);
-                intent.putExtra("todolist",task);
                 startActivityForResult(intent,2);
             }
         });
@@ -82,9 +83,7 @@ public class TodolistActivity extends AppCompatActivity
             case 1:
                 if(resultCode == RESULT_OK)
                 {
-                    int index =todolistList.indexOf(todolist);
-                    Todolist return_todolist = (Todolist) data.getSerializableExtra("return_todolist");
-                    todolistList.set(index,return_todolist);
+                    initTodolist();
                     TodolistAdapter adapter = new TodolistAdapter(TodolistActivity.this,R.layout.todolist_item, todolistList);
                     listview.setAdapter(adapter);
                 }
@@ -92,9 +91,8 @@ public class TodolistActivity extends AppCompatActivity
             case 2:
                 if(resultCode == RESULT_OK)
                 {
-                    Todolist return_todolist = (Todolist) data.getSerializableExtra("return_todolist");
-                    todolistList.add(return_todolist);
-                    TodolistAdapter adapter = new TodolistAdapter(TodolistActivity.this,R.layout.todolist_item,todolistList);
+                    initTodolist();
+                    TodolistAdapter adapter = new TodolistAdapter(TodolistActivity.this,R.layout.todolist_item, todolistList);
                     listview.setAdapter(adapter);
                 }
                 break;
@@ -103,13 +101,6 @@ public class TodolistActivity extends AppCompatActivity
 
     private void initTodolist()
     {
-        for(int i = 1; i < 20; i++)
-        {
-            Date startdate = new Date();
-            Date enddate = new Date();
-            enddate.setMonth(7);
-            Todolist task = new Todolist("Task"+i,startdate, enddate);
-            todolistList.add(task);
-        }
+        todolistList = DataSupport.order("starttime").order("endtime").find(Todolist.class);
     }
 }

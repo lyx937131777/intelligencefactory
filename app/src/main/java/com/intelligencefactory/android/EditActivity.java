@@ -9,6 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.intelligencefactory.android.db.Todolist;
+
+import org.litepal.crud.DataSupport;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,6 +28,7 @@ public class EditActivity extends AppCompatActivity implements TimePickerDialog.
     private EditText todolistState;
     private SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd  HH:mm");
     private int commond;
+    private int tID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,8 +45,20 @@ public class EditActivity extends AppCompatActivity implements TimePickerDialog.
         }
 
         final Intent intent = getIntent();
-        todolist = (Todolist) intent.getSerializableExtra("todolist");
-        actionBar.setTitle(todolist.getTitle());
+        tID = intent.getIntExtra("tID",-1);
+        if(tID == -1)
+        {
+            Date startdate = new Date();
+            Date enddate = new Date();
+            todolist = new Todolist("NewTask",startdate,enddate);
+        }else
+        {
+            todolist = DataSupport.where("id = ?",String.valueOf(tID)).findFirst(Todolist.class);
+        }
+        if(todolist.getTitle() != null)
+        {
+            actionBar.setTitle(todolist.getTitle());
+        }
         mTimePickerDialog = new TimePickerDialog(EditActivity.this);
 
         todolistTitle = (EditText) findViewById(R.id.todolist_title2);
@@ -105,8 +122,14 @@ public class EditActivity extends AppCompatActivity implements TimePickerDialog.
 
                 todolist.setContent(todolistContent.getText().toString());
                 todolist.setState(todolistState.getText().toString());
+                if(tID == -1)
+                {
+                    todolist.save();
+                }else
+                {
+                    todolist.update(tID);
+                }
                 Intent intent1 = new Intent();
-                intent.putExtra("return_todolist",todolist);
                 setResult(RESULT_OK,intent);
                 finish();
             }

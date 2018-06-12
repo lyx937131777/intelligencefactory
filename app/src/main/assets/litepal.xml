@@ -3,10 +3,12 @@
 
     <dbname value="intelligence_factory" />
 
-    <version value="1" />
+    <version value="2" />
 
     <list>
         <mapping class="com.intelligencefactory.android.db.User" />
+        <mapping class="com.intelligencefactory.android.db.Friends" />
+        <mapping class="com.intelligencefactory.android.db.Todolist" />
     </list>
 
 </litepal>

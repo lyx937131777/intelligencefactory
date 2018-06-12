@@ -1,4 +1,6 @@
-package com.intelligencefactory.android;
+package com.intelligencefactory.android.db;
+
+import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -7,8 +9,9 @@ import java.util.Date;
  * Created by hp on 2018/5/25.
  */
 
-public class Todolist implements Serializable
+public class Todolist extends DataSupport
 {
+    private int id;
     private String title;
     private String content;
     private Date starttime;
@@ -23,7 +26,15 @@ public class Todolist implements Serializable
         state = "Waiting";
         content = null;
     }
+    public int getId()
+    {
+        return id;
+    }
 
+    public void setId(int id)
+    {
+        this.id = id;
+    }
     public String getTitle()
     {
         return title;
