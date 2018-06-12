@@ -22,6 +22,7 @@ public class MyService extends Service
     private MyThread myThread = null;
     private Thread newThread = null;
     public static boolean isRun = true;
+    public static Set<String> whitelist = new HashSet<>();
 
     private final class MyThread implements Runnable
     {
@@ -45,7 +46,7 @@ public class MyService extends Service
                     TimeUnit.SECONDS.sleep(2);
                     getTopApp(context);
                     if (!topActivity.equals("com.intelligencefactory.android") && !defaultLaunchers
-                            .contains(topActivity))
+                            .contains(topActivity) && !whitelist.contains(topActivity))
                     {
                         Intent intent = new Intent(Intent.ACTION_MAIN);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

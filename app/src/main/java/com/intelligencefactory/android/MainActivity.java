@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         text2 = findViewById(R.id.text2);
         seekBar = findViewById(R.id.seekbar);
         seekBar.setOnSeekBarChangeListener(this);
+
         if (actionBar != null)
         {
             actionBar.setDisplayHomeAsUpEnabled(true);

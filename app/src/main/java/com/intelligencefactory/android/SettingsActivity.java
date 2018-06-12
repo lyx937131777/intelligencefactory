@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -17,6 +18,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 {
     Button bt_cloud_update,bt_logout;
     ToggleButton bt_ring_toggle, bt_show_toggle, bt_vibrate_toggle, bt_white_list_toggle;
+    RelativeLayout white_list;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -59,6 +61,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         bt_white_list_toggle.setOnClickListener(this);
         bt_logout = (Button) findViewById(R.id.logout);
         bt_logout.setOnClickListener(this);
+        white_list =(RelativeLayout)findViewById(R.id.white_l);
+        white_list.setOnClickListener(this);
     }
 
     @Override
@@ -96,6 +100,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(intent_logout);
                 MainActivity.instance.finish();
                 finish();
+            case R.id.white_l:
+                Intent intent_whitlist = new Intent(SettingsActivity.this, WhiteListActivity.class);
+                 startActivity(intent_whitlist);
             default:
                 break;
         }
