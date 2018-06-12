@@ -4,6 +4,11 @@ import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,13 +20,18 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import io.feeeei.circleseekbar.CircleSeekBar;
@@ -270,4 +280,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         text.setText(format.format(date));
 
     }
+
+    private void queryFilterAppInfo() {
+        PackageManager pm = this.getPackageManager();
+        // 查询所有已经安装的应用程序
+        List<ApplicationInfo> appInfos= pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);// GET_UNINSTALLED_PACKAGES代表已删除，但还有安装目录的
+        List<ApplicationInfo> applicationInfos=new ArrayList<>();
+
+        // 创建一个类别为CATEGORY_LAUNCHER的该包名的Intent
+        Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);
+        resolveIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        // 通过getPackageManager()的queryIntentActivities方法遍历,得到所有能打开的app的packageName
+        List<ResolveInfo>  resolveinfoList = getPackageManager()
+                .queryIntentActivities(resolveIntent, 0);
+        Set<String> allowPackages=new HashSet();
+        for (ResolveInfo resolveInfo:resolveinfoList){
+            allowPackages.add(resolveInfo.activityInfo.packageName);
+
+        }
+
+        for (ApplicationInfo app:appInfos) {
+//            if((app.flags & ApplicationInfo.FLAG_SYSTEM) <= 0)//通过flag排除系统应用，会将电话、短信也排除掉
+//            {
+//                applicationInfos.add(app);
+//            }
+
+            if (allowPackages.contains(app.packageName)){
+                applicationInfos.add(app);
+            }
+        }
+        for (int i=0;i<applicationInfos.size();i++){
+            ApplicationInfo info = applicationInfos.get(i);
+            String pkName = info.packageName;
+            String name = info.loadLabel(this.getPackageManager()).toString();
+            Drawable drawable = info.loadIcon(this.getPackageManager());
+        }
+    }
+
+
 }
