@@ -79,7 +79,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 toggleSwtich(bt_show_toggle, "锁屏显示to-do list", "锁屏不显示");
                 break;
             case R.id.logout:
-                if(MyService.isRun)
+                if(MainActivity.serviviceRun)
                 {
                     new AlertDialog.Builder(this)
                             .setTitle("警告")

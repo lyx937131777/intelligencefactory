@@ -19,7 +19,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.intelligencefactory.android.db.User;
 import com.intelligencefactory.android.util.HttpUtil;
+import com.intelligencefactory.android.util.PermissionsUtil;
+import com.intelligencefactory.android.util.Utility;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 
@@ -51,6 +59,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        PermissionsUtil.verifyStoragePermissions(this);
         initView();
         android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -194,45 +203,76 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
                 if (!username_text.matches(Patterns.EMAIL_ADDRESS.toString()))
                 {
                     Toast.makeText(LoginActivity.this, "邮箱格式不正确", Toast.LENGTH_LONG).show();
+                }else if(password_text.length() < 6)
+                {
+                    Toast.makeText(LoginActivity.this, "密码位数不正确", Toast.LENGTH_LONG).show();
                 }else
                 {
-                    editor = pref.edit();
-                    editor.putString("userID",username_text);
-                    editor.putString("password",password_text);
-                    editor.apply();
-                    Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent_login);
-                    finish();
-                }
-
-                /*
-                String address = HttpUtil.LocalAddress + "/Login";
-                HttpUtil.loginRequest(address, username_text, password_text, new Callback()
-                {
-                    @Override
-                    public void onFailure(Call call, IOException e)
+                    String address = HttpUtil.LocalAddress + "/Login";
+                    HttpUtil.loginRequest(address, username_text, password_text, new Callback()
                     {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException
-                    {
-                        final String responsDate = response.body().string();
-                        Log.e("Login",responsDate);
-                        if(responsDate.equals("true"))
+                        @Override
+                        public void onFailure(Call call, IOException e)
                         {
-                            editor = pref.edit();
-                            editor.putString("userID",username_text);
-                            editor.putString("password",password_text);
-                            editor.apply();
-                            Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent_login);
+                            e.printStackTrace();
+                            runOnUiThread(new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    Toast.makeText(LoginActivity.this, "服务器连接错误", Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
-                    }
-                });
-                */
 
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException
+                        {
+                            final String responsDate = response.body().string();
+                            Log.e("Login",responsDate);
+                            if(responsDate.equals("true"))
+                            {
+                                editor = pref.edit();
+                                editor.putString("userID",username_text);
+                                editor.putString("password",password_text);
+                                editor.apply();
+                                //Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
+                                //startActivity(intent_login);
+                                String address = HttpUtil.LocalAddress + "/QueryUserInfo";
+                                HttpUtil.searchKeyRequest(address, username_text, new Callback()
+                                {
+                                    @Override
+                                    public void onFailure(Call call, IOException e)
+                                    {
+                                        e.printStackTrace();
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException
+                                    {
+                                        final String responsDate = response.body().string();
+                                        Utility.storeLoginUser(responsDate,username_text);
+                                        editor.putString("latest",String.valueOf(System.currentTimeMillis()));
+                                        editor.apply();
+                                        Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(intent_login);
+                                    }
+                                });
+                                finish();
+                            }else
+                            {
+                                runOnUiThread(new Runnable()
+                                {
+                                    @Override
+                                    public void run()
+                                    {
+                                        Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
                 break;
             // 注册按钮
             case R.id.bt_go_register:
@@ -240,8 +280,6 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
                 reg.setClass(LoginActivity.this, RegisterActivity.class);
                 startActivity(reg);
                 break;
-
-
             default:
                 break;
         }

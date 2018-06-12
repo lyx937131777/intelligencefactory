@@ -1,5 +1,7 @@
 package com.intelligencefactory.android;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -237,24 +239,7 @@ public class RegisterActivity extends AppCompatActivity implements OnClickListen
                 } else
                 {
                     Log.e("Register", nickname_text);
-                    String nickname_gbk = null;
-                    String nickname_utf = null;
-                    try
-                    {
-                        nickname_gbk = URLEncoder.encode(nickname_text, "GBK");
-                        Log.e("Register", nickname_gbk);
-                    } catch (UnsupportedEncodingException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    try
-                    {
-                        nickname_utf = URLEncoder.encode(nickname_text, "UTF-8");
-                        Log.e("Register", nickname_utf);
-                    } catch (UnsupportedEncodingException e)
-                    {
-                        e.printStackTrace();
-                    }
+
                     String address = HttpUtil.LocalAddress + "/Register";
                     HttpUtil.registerRequest(address, username_text, password_text,
                             nickname_text, new Callback()
@@ -272,15 +257,56 @@ public class RegisterActivity extends AppCompatActivity implements OnClickListen
                                 {
                                     final String responseData = response.body().string();
                                     Log.e("Register", "源码 " + responseData);
-                                    if(response.equals("true"))
+                                    if(responseData.equals("true"))
                                     {
+                                        runOnUiThread(new Runnable()
+                                        {
+                                            @Override
+                                            public void run()
+                                            {
+                                                new AlertDialog.Builder(RegisterActivity.this)
+                                                        .setTitle("提示")
+                                                        .setMessage("注册成功！")
+                                                        .setPositiveButton("确定", new DialogInterface.OnClickListener()
+                                                        {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialog, int which)
+                                                            {
+                                                                finish();
+                                                            }
+                                                        })
+                                                        .show();
+                                            }
+                                        });
 
-                                    }else if(response.equals("same"))
+                                    }else if(responseData.equals("same"))
                                     {
-
+                                        runOnUiThread(new Runnable()
+                                        {
+                                            @Override
+                                            public void run()
+                                            {
+                                                new AlertDialog.Builder(RegisterActivity.this)
+                                                        .setTitle("提示")
+                                                        .setMessage("该账户已被注册！")
+                                                        .setPositiveButton("确定", null)
+                                                        .show();
+                                            }
+                                        });
                                     }else
                                     {
-
+                                        runOnUiThread(new Runnable()
+                                        {
+                                            @Override
+                                            public void run()
+                                            {
+                                                new AlertDialog.Builder(RegisterActivity.this)
+                                                        .setTitle("提示")
+                                                        .setMessage("由于未知原因注册失败，请重试！")
+                                                        .setPositiveButton("确定", null)
+                                                        .show();
+                                            }
+                                        });
                                     }
                                 }
                             });

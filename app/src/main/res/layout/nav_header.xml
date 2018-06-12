@@ -28,7 +28,7 @@
         android:id="@+id/nav_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="那年盛夏好大雨"
+        android:text="用户123"
         android:textColor="#FFF"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@id/nav_username"/>

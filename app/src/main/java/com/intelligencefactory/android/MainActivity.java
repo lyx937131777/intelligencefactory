@@ -21,10 +21,18 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.StringSignature;
+import com.intelligencefactory.android.db.User;
+import com.intelligencefactory.android.util.HttpUtil;
+
+import org.litepal.crud.DataSupport;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,9 +43,9 @@ import io.feeeei.circleseekbar.CircleSeekBar;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
         CircleSeekBar.OnSeekBarChangeListener
 {
-
     private CountDownTimer timer;
 
+    public static boolean serviviceRun = false;
     public static MainActivity instance = null;
     private DrawerLayout mDrawerLayout;
     private io.feeeei.circleseekbar.CircleSeekBar seekBar;
@@ -53,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static long time = 0;
     public static long countdowntime = 0;
     private SharedPreferences pref;
-    String username;
+    private String userID;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -86,6 +94,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return mode == AppOpsManager.MODE_ALLOWED;
     }
 
+    @Override
+    protected void onRestart()
+    {
+        super.onRestart();
+        NavigationView navView = findViewById(R.id.nav_view);
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
+        userID = pref.getString("userID", null);
+        View view = navView.getHeaderView(0);
+        TextView tv_username = view.findViewById(R.id.nav_username);
+        if (userID != null)
+        {
+            tv_username.setText(userID);
+        }
+        User user = DataSupport.where("userID = ?", userID).findFirst(User.class);
+        String nickname = user.getNickname();
+        String profile_photo = user.getProfile_photo();
+
+        TextView nick_text = (TextView) view.findViewById(R.id.nav_nickname);
+        nick_text.setText(nickname);
+        de.hdodenhof.circleimageview.CircleImageView photo = (de.hdodenhof.circleimageview
+                .CircleImageView) view.findViewById(R.id.icon_image);
+        if (!profile_photo.equals("null"))
+        {
+            Glide.with(MainActivity.this).load(HttpUtil.LocalAddress +"/"+ profile_photo).signature
+                    (new StringSignature(pref.getString("latest",""))).into(photo);
+            Log.e("test", "Hello");
+        } else
+        {
+            Glide.with(MainActivity.this).load(R.drawable.nav_icon).into(photo);
+            //photo.setImageResource(R.drawable.nav_icon);
+            Log.e("test", "NULL!!!!!!!");
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -161,13 +202,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         stop.setOnClickListener(this);
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
-        username = pref.getString("userID", null);
+        userID = pref.getString("userID", null);
         View view = navView.getHeaderView(0);
         TextView tv_username = view.findViewById(R.id.nav_username);
-        if (username != null)
+        if (userID != null)
         {
-            tv_username.setText(username);
+            tv_username.setText(userID);
         }
+        User user = DataSupport.where("userID = ?", userID).findFirst(User.class);
+        String nickname = user.getNickname();
+        String profile_photo = user.getProfile_photo();
+
+        TextView nick_text = (TextView) view.findViewById(R.id.nav_nickname);
+        nick_text.setText(nickname);
+        de.hdodenhof.circleimageview.CircleImageView photo = (de.hdodenhof.circleimageview
+                .CircleImageView) view.findViewById(R.id.icon_image);
+
+        if (!profile_photo.equals("null"))
+        {
+            Glide.with(MainActivity.this).load(HttpUtil.LocalAddress +"/"+ profile_photo).signature
+                    (new StringSignature(pref.getString("latest",""))).into(photo);
+            Log.e("test", "Hello");
+        } else
+        {
+            Glide.with(MainActivity.this).load(R.drawable.nav_icon).into(photo);
+            //photo.setImageResource(R.drawable.nav_icon);
+            Log.e("test", "NULL!!!!!!!");
+        }
+        photo.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent_toUserInfo = new Intent(MainActivity.this, UserInfoActivity.class);
+                startActivityForResult(intent_toUserInfo, 1);
+            }
+        });
     }
 
     @Override
@@ -199,6 +269,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 }
 
+                serviviceRun = true;
                 MyService.isRun = true;
                 Intent startIntant = new Intent(this, MyService.class);
                 startService(startIntant);
@@ -207,17 +278,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 start.setVisibility(View.INVISIBLE);
                 stop.setVisibility(View.VISIBLE);
 
-                timer = new CountDownTimer(curtime*60*1000, 1000)
+                timer = new CountDownTimer(curtime * 60 * 1000, 1000)
                 {
-
                     @Override
                     public void onTick(long millisUntilFinished)
                     {
                         long ttime = millisUntilFinished / 1000;
 
-                        if (ttime <= 59) {
+                        if (ttime <= 59)
+                        {
                             text.setText(String.format("00:%02d", ttime));
-                        } else {
+                        } else
+                        {
                             text.setText(String.format("%02d:%02d", ttime / 60, ttime % 60));
                         }
                     }
@@ -226,6 +298,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onFinish()
                     {
                         MyService.isRun = false;
+                        serviviceRun = false;
                         seekBar.setVisibility(View.VISIBLE);
                         text2.setVisibility(View.INVISIBLE);
                         start.setVisibility(View.VISIBLE);
@@ -250,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 timer = null;
                             }
                         })
-                        .setNegativeButton("取消",null)
+                        .setNegativeButton("取消", null)
                         .show();
                 break;
             default:
@@ -266,8 +339,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         text.setText(curtime + "分钟");
     }
 
-    public void onDestroy() {
-        if(timer!=null){
+    public void onDestroy()
+    {
+        if (timer != null)
+        {
             timer.cancel();
             timer = null;
         }

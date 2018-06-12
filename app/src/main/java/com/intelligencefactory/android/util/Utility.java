@@ -45,4 +45,72 @@ public class Utility
         }
         return false;
     }
+
+    public static boolean storeLoginUser(String response, String userID)
+    {
+        if (!TextUtils.isEmpty(response))
+        {
+            try
+            {
+                DataSupport.deleteAll(User.class, "userID = ?", userID);
+                JSONArray allUsers = new JSONArray(response);
+                for (int i = 0; i < allUsers.length(); i++)
+                {
+                    JSONObject userObject = allUsers.getJSONObject(i);
+                    if (userObject.getString("userID").equals(userID))
+                    {
+                        User user = new User();
+                        user.setNickname(userObject.getString("nickname"));
+                        user.setUserID(userObject.getString("userID"));
+                        user.setPassword(userObject.getString("password"));
+                        user.setPhone_number(userObject.getString("phone_number"));
+                        user.setProfile_photo(userObject.getString("profile_photo"));
+                        Log.e("test", user.getUserID());
+                        Log.e("test", user.getPassword());
+                        Log.e("test", user.getNickname());
+                        Log.e("test", user.getPhone_number());
+                        Log.e("test", user.getProfile_photo());
+                        user.save();
+                    }
+                }
+                return true;
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean searchUser(String response)
+    {
+        if (!TextUtils.isEmpty(response))
+        {
+            try
+            {
+                JSONArray allUsers = new JSONArray(response);
+                for (int i = 0; i < allUsers.length(); i++)
+                {
+                    JSONObject userObject = allUsers.getJSONObject(i);
+                    User user = new User();
+                    user.setNickname(userObject.getString("nickname"));
+                    user.setUserID(userObject.getString("userID"));
+                    user.setPassword(userObject.getString("password"));
+                    user.setPhone_number(userObject.getString("phone_number"));
+                    user.setProfile_photo(userObject.getString("profile_photo"));
+                    Log.e("test", user.getUserID());
+                    Log.e("test", user.getPassword());
+                    Log.e("test", user.getNickname());
+                    Log.e("test", user.getPhone_number());
+                    Log.e("test", user.getProfile_photo());
+                    user.save();
+                }
+                return true;
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
 }

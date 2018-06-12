@@ -23,7 +23,6 @@ public class MyService extends Service
     private Thread newThread = null;
     public static boolean isRun = true;
 
-
     private final class MyThread implements Runnable
     {
         private Context context;
@@ -147,9 +146,6 @@ public class MyService extends Service
         newThread = new Thread(myThread);
         newThread.start();
         Log.d("MyService", "Service is start.");
-
-
-
     }
 
     @Override
