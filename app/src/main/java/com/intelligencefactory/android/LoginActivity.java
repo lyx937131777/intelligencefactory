@@ -87,6 +87,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
             case android.R.id.home:
                 finish();
                 break;
+
         }
         return true;
     }

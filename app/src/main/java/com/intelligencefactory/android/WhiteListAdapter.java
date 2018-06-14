@@ -49,7 +49,6 @@ public class WhiteListAdapter extends RecyclerView.Adapter<WhiteListAdapter.View
                     int position = holder.getAdapterPosition();
                     ApplicationInfo info = AppinfoList.get(position);
                     MyService.whitelist.add(info.packageName);
-                    
                 }else {
                     int position = holder.getAdapterPosition();
                     ApplicationInfo info = AppinfoList.get(position);
@@ -67,6 +66,9 @@ public class WhiteListAdapter extends RecyclerView.Adapter<WhiteListAdapter.View
         ApplicationInfo info = AppinfoList.get(position);
         holder.appIcon.setImageDrawable(info.loadIcon(pm));
         holder.appName.setText(info.loadLabel(pm).toString());
+        if(MyService.whitelist.contains(info.packageName)){
+            holder.appToggle.setChecked(true);
+        }
     }
 
     @Override

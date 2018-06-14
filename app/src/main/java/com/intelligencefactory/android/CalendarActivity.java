@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 public class CalendarActivity extends AppCompatActivity
 {
-
     CalendarView cv;
     DatePicker dp;
     @Override
@@ -35,7 +34,7 @@ public class CalendarActivity extends AppCompatActivity
             {
                 // 使用Toast显示用户选择的日期
                 Toast.makeText(CalendarActivity.this,
-                        "你生日是" + year + "年" + month + "月"
+                        "你选择的是" + year + "年" + month + "月"
                                 + dayOfMonth + "日",
                         Toast.LENGTH_SHORT).show();
             }

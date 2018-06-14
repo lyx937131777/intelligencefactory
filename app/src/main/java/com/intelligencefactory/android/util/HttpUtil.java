@@ -12,7 +12,7 @@ import okhttp3.RequestBody;
 
 public class HttpUtil
 {
-    public static final String LocalAddress = "http://192.168.1.102:8080";
+    public static final String LocalAddress = "http://192.168.43.192:8080";
 
     public static void sendOkHttpRequest(String address, okhttp3.Callback callback)
     {
@@ -91,6 +91,17 @@ public class HttpUtil
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new FormBody.Builder()
                 .add("userID",userID)
+                .build();
+        Request request = new Request.Builder().url(address).post(requestBody).build();
+        client.newCall(request).enqueue(callback);
+    }
+
+    public static void modifypasswordRequest(String address, String userID, String password, okhttp3.Callback callback)
+    {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("userID",userID)
+                .add("password",password)
                 .build();
         Request request = new Request.Builder().url(address).post(requestBody).build();
         client.newCall(request).enqueue(callback);

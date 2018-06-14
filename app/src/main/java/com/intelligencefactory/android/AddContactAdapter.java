@@ -88,11 +88,12 @@ public class AddContactAdapter extends RecyclerView.Adapter<AddContactAdapter.Vi
                     @Override
                     public void onResponse(Call call, Response response) throws IOException
                     {
+
                         final String responseData = response.body().string();
                         Log.e("test",responseData);
                         if(responseData.equals("true"))
                         {
-                            holder.bt_add.setEnabled(false);
+                            //holder.bt_add.setEnabled(false);
                         }
                     }
                 });

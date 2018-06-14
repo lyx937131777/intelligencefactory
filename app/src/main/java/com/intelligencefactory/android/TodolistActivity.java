@@ -1,8 +1,11 @@
 package com.intelligencefactory.android;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,8 +16,10 @@ import com.intelligencefactory.android.db.Todolist;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class TodolistActivity extends AppCompatActivity
@@ -61,6 +66,7 @@ public class TodolistActivity extends AppCompatActivity
                 startActivityForResult(intent,2);
             }
         });
+
     }
 
     @Override
