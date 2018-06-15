@@ -3,6 +3,7 @@ package com.intelligencefactory.android;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +18,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class EditActivity extends AppCompatActivity implements TimePickerDialog.TimePickerDialogInterface
+public class EditActivity extends AppCompatActivity implements TimePickerDialog
+        .TimePickerDialogInterface
 {
     private TimePickerDialog mTimePickerDialog;
     private Todolist todolist;
@@ -36,7 +38,7 @@ public class EditActivity extends AppCompatActivity implements TimePickerDialog.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
-        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        final android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null)
@@ -45,17 +47,17 @@ public class EditActivity extends AppCompatActivity implements TimePickerDialog.
         }
 
         final Intent intent = getIntent();
-        tID = intent.getIntExtra("tID",-1);
-        if(tID == -1)
+        tID = intent.getIntExtra("tID", -1);
+        if (tID == -1)
         {
             Date startdate = new Date();
             Date enddate = new Date();
-            todolist = new Todolist("NewTask",startdate,enddate);
-        }else
+            todolist = new Todolist("NewTask", startdate, enddate);
+        } else
         {
-            todolist = DataSupport.where("id = ?",String.valueOf(tID)).findFirst(Todolist.class);
+            todolist = DataSupport.where("id = ?", String.valueOf(tID)).findFirst(Todolist.class);
         }
-        if(todolist.getTitle() != null)
+        if (todolist.getTitle() != null)
         {
             actionBar.setTitle(todolist.getTitle());
         }
@@ -122,15 +124,11 @@ public class EditActivity extends AppCompatActivity implements TimePickerDialog.
 
                 todolist.setContent(todolistContent.getText().toString());
                 todolist.setState(todolistState.getText().toString());
-                if(tID == -1)
-                {
-                    todolist.save();
-                }else
-                {
-                    todolist.update(tID);
-                }
+
+                todolist.save();
+
                 Intent intent1 = new Intent();
-                setResult(RESULT_OK,intent);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
@@ -151,9 +149,9 @@ public class EditActivity extends AppCompatActivity implements TimePickerDialog.
     @Override
     public void positiveListener()
     {
-        Date newdate =new Date();
-        newdate.setYear(mTimePickerDialog.getYear()-1900);
-        newdate.setMonth(mTimePickerDialog.getMonth()-1);
+        Date newdate = new Date();
+        newdate.setYear(mTimePickerDialog.getYear() - 1900);
+        newdate.setMonth(mTimePickerDialog.getMonth() - 1);
         newdate.setDate(mTimePickerDialog.getDay());
         newdate.setMinutes(mTimePickerDialog.getMinute());
         newdate.setHours(mTimePickerDialog.getHour());
