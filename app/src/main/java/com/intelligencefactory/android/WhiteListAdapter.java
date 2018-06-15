@@ -66,6 +66,9 @@ public class WhiteListAdapter extends RecyclerView.Adapter<WhiteListAdapter.View
         ApplicationInfo info = AppinfoList.get(position);
         holder.appIcon.setImageDrawable(info.loadIcon(pm));
         holder.appName.setText(info.loadLabel(pm).toString());
+        if (MyService.whitelist.contains(info.packageName)){
+            holder.appToggle.setChecked(true);
+        }
     }
 
     @Override
