@@ -50,7 +50,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class EditUserInfoActivity extends AppCompatActivity
+public class    EditUserInfoActivity extends AppCompatActivity
 {
     private EditText et_nickname;
     private EditText et_phone_number;

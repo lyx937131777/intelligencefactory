@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.intelligencefactory.android.db.Todolist;
 
@@ -41,7 +42,7 @@ public class TodolistActivity extends AppCompatActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        TodolistAdapter adapter = new TodolistAdapter(TodolistActivity.this,R.layout.todolist_item, todolistList);
+        final TodolistAdapter adapter = new TodolistAdapter(TodolistActivity.this,R.layout.todolist_item, todolistList);
         listview = (ListView) findViewById(R.id.list_view);
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -54,6 +55,39 @@ public class TodolistActivity extends AppCompatActivity
                 int tID = todolist.getId();
                 intent.putExtra("tID",tID);
                 startActivityForResult(intent,1);
+            }
+        });
+        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id)
+            {
+                AlertDialog.Builder builder=new AlertDialog.Builder(TodolistActivity.this);
+                builder.setMessage("确定删除?");
+                builder.setTitle("提示");
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        todolist = todolistList.get(position);
+                        DataSupport.delete(Todolist.class,todolist.getId());
+                        initTodolist();
+                        TodolistAdapter adapter = new TodolistAdapter(TodolistActivity.this,R.layout.todolist_item, todolistList);
+                        listview.setAdapter(adapter);
+                        Toast.makeText(getBaseContext(), "删除列表项", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                //添加AlertDialog.Builder对象的setNegativeButton()方法
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                builder.create().show();
+                return true;
             }
         });
         Button newButton = (Button) findViewById(R.id.new_button);
@@ -107,6 +141,6 @@ public class TodolistActivity extends AppCompatActivity
 
     private void initTodolist()
     {
-        todolistList = DataSupport.order("starttime").order("endtime").find(Todolist.class);
+        todolistList = DataSupport.order("endtime").order("starttime").find(Todolist.class);
     }
 }

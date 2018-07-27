@@ -12,7 +12,8 @@ import okhttp3.RequestBody;
 
 public class HttpUtil
 {
-    public static final String LocalAddress = "http://192.168.43.192:8080";
+    //部署完服务器后将16行（192.168.1.100）改成本地服务器的IPV4地址即可
+    public static final String LocalAddress = "http://192.168.1.100:8080";
 
     public static void sendOkHttpRequest(String address, okhttp3.Callback callback)
     {

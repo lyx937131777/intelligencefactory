@@ -100,9 +100,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(intent_logout);
                 MainActivity.instance.finish();
                 finish();
+                break;
             case R.id.white_l:
                 Intent intent_whitlist = new Intent(SettingsActivity.this, WhiteListActivity.class);
                  startActivity(intent_whitlist);
+                 break;
             default:
                 break;
         }

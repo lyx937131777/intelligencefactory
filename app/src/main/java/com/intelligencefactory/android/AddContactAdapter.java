@@ -93,7 +93,15 @@ public class AddContactAdapter extends RecyclerView.Adapter<AddContactAdapter.Vi
                         Log.e("test",responseData);
                         if(responseData.equals("true"))
                         {
-                            //holder.bt_add.setEnabled(false);
+                            AddContactActivity addContactActivity = (AddContactActivity)mContext;
+                            addContactActivity.runOnUiThread(new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    holder.bt_add.setEnabled(false);
+                                }
+                            });
                         }
                     }
                 });

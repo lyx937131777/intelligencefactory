@@ -209,15 +209,23 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
                     Toast.makeText(LoginActivity.this, "密码位数不正确", Toast.LENGTH_LONG).show();
                 }else
                 {
-                    /*
+                    //该版本为测试版本，无需部署服务器，但无法使用修改信息和好友功能
+                    //如果服务器部署成功，则将214-228行代码注释掉，并修改HttpUtil第16行，即可运行正式版本
                     editor = pref.edit();
                     editor.putString("userID",username_text);
                     editor.putString("password",password_text);
+                    editor.putString("latest",String.valueOf(System.currentTimeMillis()));
                     editor.apply();
                     Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent_login);
+                    User user = new User();
+                    user.setUserID(username_text);
+                    user.setPassword(password_text);
+                    user.setNickname("测试用户");
+                    user.setPhone_number("");
+                    user.setProfile_photo("null");
+                    user.save();
                     finish();
-                    */
                     String address = HttpUtil.LocalAddress + "/Login";
                     HttpUtil.loginRequest(address, username_text, password_text, new Callback()
                     {
@@ -246,8 +254,6 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
                                 editor.putString("userID",username_text);
                                 editor.putString("password",password_text);
                                 editor.apply();
-                                //Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
-                                //startActivity(intent_login);
                                 String address = HttpUtil.LocalAddress + "/QueryUserInfo";
                                 HttpUtil.searchKeyRequest(address, username_text, new Callback()
                                 {
@@ -266,9 +272,9 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener
                                         editor.apply();
                                         Intent intent_login = new Intent(LoginActivity.this, MainActivity.class);
                                         startActivity(intent_login);
+                                        finish();
                                     }
                                 });
-                                finish();
                             }else
                             {
                                 runOnUiThread(new Runnable()
